@@ -4,18 +4,21 @@ import nltk
 import string
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
+from nltk.tokenize import wordpunct_tokenize
 
-nltk.download('punkt')
+# Download only required NLTK data
 nltk.download('stopwords')
 
+# Initialize stemmer
 ps = PorterStemmer()
 
-tfidf = pickle.load(open('vectorizer.pkl','rb'))
-model = pickle.load(open('model.pkl','rb'))
+# Load vectorizer and model
+tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
+model = pickle.load(open('model.pkl', 'rb'))
 
 def transform_text(text):
     text = text.lower()
-    text = nltk.word_tokenize(text)
+    text = wordpunct_tokenize(text)
 
     y = []
     for i in text:
@@ -31,6 +34,7 @@ def transform_text(text):
 
     return " ".join(y)
 
+# Streamlit UI
 st.title("📩 SMS Spam Classifier")
 
 input_sms = st.text_area("Enter the message")
@@ -44,3 +48,5 @@ if st.button("Predict"):
         st.error("🚫 Spam Message")
     else:
         st.success("✅ Not Spam")
+
+
